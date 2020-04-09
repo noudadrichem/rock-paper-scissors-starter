@@ -1,5 +1,9 @@
 package domain.rules;
 
+import java.util.List;
+import java.util.Arrays;
+import java.util.Collections;
+
 import domain.Move;
 import domain.Result;
 import domain.Rules;
@@ -7,32 +11,14 @@ import domain.Rules;
 public class RockPaperScissors implements Rules {
     @Override
     public Result decide(Move mine, Move theirs) {
-        switch (mine) {
-            case ROCK:
-                switch (theirs) {
-                    case SCISSORS:
-                        return Result.WIN;
-                    case PAPER:
-                        return Result.LOSE;
-                }
-
-            case PAPER:
-                switch (theirs) {
-                    case ROCK:
-                        return Result.WIN;
-                    case SCISSORS:
-                        return Result.LOSE;
-                }
-
-            case SCISSORS:
-                switch (theirs) {
-                    case PAPER:
-                        return Result.WIN;
-                    case ROCK:
-                        return Result.LOSE;
-                }
+        // the order of power as copied from the table in the doc.
+        List<Move> powerOrder = Arrays.asList(Move.PAPER, Move.ROCK, Move.SCISSORS, Move.PAPER);
+        if (mine.equals(theirs)) { // this is an instant draw
+            return Result.DRAW;
+        } else if (Collections.indexOfSubList(powerOrder, Arrays.asList(mine, theirs)) >= 0) {
+            return Result.WIN;
+        } else {
+            return Result.LOSE;
         }
-
-        return Result.DRAW;
     }
 }
